@@ -8,68 +8,66 @@
  * - The user can continue rolling until they choose to stop or roll a 6.
  * - Points are accumulated as long as the user does not roll a 6 or stop voluntarily.
  * 
- * @version Jan 29, 2025
+ * @version Feb 17, 2025
  * @author Abdirahman
  */
 import java.util.Scanner;
 
 public class HumanPlayer extends Player {
+    private Scanner scanner; // Reference to a shared Scanner instance
 
     /**
-     * Constructor for the HumanPlayer class.
+     * Constructor for HumanPlayer.
      * 
-     * @param name The name of the player.
+     * @param name    The player's name.
+     * @param scanner The Scanner instance shared across the game.
      */
-    public HumanPlayer(String name) {
-        super(name); // Call the constructor of the Player superclass
+    public HumanPlayer(String name, Scanner scanner) {
+        super(name);
+        this.scanner = scanner; // Assign the shared Scanner instance
     }
 
     /**
-     * Implements the play method for the HumanPlayer class.
-     * The user rolls a six-sided die, accumulating points until they choose to stop
-     * or roll a 6. Rolling a 6 results in a loss of all points for the turn.
+     * Plays the player's turn, allowing them to roll the dice and decide whether to continue.
+     * The player rolls until they choose to stop or roll a 6 (which causes them to lose their turn).
      * 
-     * @return The total score for the turn. Returns 0 if the user rolls a 6.
+     * @return The player's accumulated turn score.
      */
     @Override
     public int play() {
-        int turnScore = 0; // Initialize the turn score
-        Scanner scan = new Scanner(System.in); // Scanner for user input
+        int turnScore = 0; // Initialize turn score
 
-        // Game loop: The user can continue rolling until they stop or roll a 6
         while (true) {
-            // Roll a six-sided die and display the result
+            // Roll a six-sided die (1-6)
             int roll = (int) (Math.random() * 6 + 1);
             System.out.println(getName() + " rolled " + roll);
 
-            // Check if the player loses the turn by rolling a 6
+            // If the player rolls a 6, they lose all points for this turn
             if (roll == 6) {
-                System.out.println("Womp Womp Womp...you lose. Better luck next time!");
-                System.out.println(getName() + "'s score: " + turnScore);
-                scan.close(); // Close the scanner before returning
-                return 0; // End the turn with a score of 0
+                System.out.println("Oops! You rolled a 6. You lose all points from this turn.");
+                System.out.println(getName() + "'s turn ends with 0 points.");
+                return 0; // End turn with a score of 0
             }
 
-            // Add the roll value to the turn score
+            // Add roll value to the turn score
             turnScore += roll;
             System.out.println("Current Score: " + turnScore);
 
-            // Ask the user if they want to roll again
-            System.out.println("Dare to play another turn? (yes/no)");
-            String response = scan.nextLine().toLowerCase();
+            // Ask player if they want to continue rolling
+            System.out.print("Dare to play another turn? (yes/no): ");
 
-            // If the user chooses to stop, end the turn and return the score
-            if (response.equals("no")) {
-                System.out.println(getName() + " ends the turn with a score of " + turnScore);
-                scan.close(); // Close the scanner before returning
-                return turnScore;
-            }
+            // Read the user's response
+            String response = scanner.next(); // Read a single word input
+            scanner.nextLine(); // Consume any leftover input (fixes Scanner issue)
 
-            // Validate input for unexpected responses
-            while (!response.equals("yes") && !response.equals("no")) {
-                System.out.println("Invalid input! Please type 'yes' or 'no':");
-                response = scan.nextLine().toLowerCase();
+            // If player types anything other than "yes", end their turn
+            if (!response.equalsIgnoreCase("yes")) {
+                break;
             }
         }
+
+        // Display final score for this turn
+        System.out.println(getName() + " ends the turn with a score of " + turnScore);
+        return turnScore; // Return the accumulated score
     }
 }
