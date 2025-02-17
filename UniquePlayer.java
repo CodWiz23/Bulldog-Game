@@ -1,14 +1,13 @@
 /**
  * 
- * The UniquePlayerAI class extends the abstract Player class.
- * This class implements a strategy where the player rolls a die
- * and accumulates points based on specific conditions:
+ * The UniquePlayer class extends the abstract Player class, implementing a modified version of 
+ * the Bulldog game with mechanics similar to Blackjack. Players aim to reach exactly 21 points 
+ * without rolling a 6. If a player rolls a 6, they lose their turn and forfeit all points 
+ * accumulated during that turn. If their total score exceeds 21, their turn ends, but they keep 
+ * their accumulated points.
  * 
- * - If a 6 is rolled, the player's turn ends immediately with 0 points.
- * - The player continues rolling until they reach at least 21 points.
- * - If the score reaches 21 or more, the player always stops.
- * 
- * @author abdirahman 
+ * @version Jan 29, 2025
+ * @author abdirahman
  */
 public class UniquePlayer extends Player {
 
@@ -32,12 +31,8 @@ public class UniquePlayer extends Player {
 				System.out.println(getName() + "'s score: " + turnScore);
 				return 0; // End the turn with a score of 0
 			}
-			if(turnScore + roll > 21) {
-				System.out.println("Womp Womp Womp...you lose all your points from this turn. Better luck next time!");
-				System.out.println(getName() + "'s score: " + turnScore);
-				return 0; // End the turn with a score of 0
-			}
-			if(turnScore + roll == 21){
+
+			if(turnScore + roll >= 21){
 				turnScore += roll;
 				System.out.println("Your turn is over for this round.");
 				return turnScore;
