@@ -13,7 +13,7 @@ import java.util.Scanner;
  * @version Jan 29, 2025
  * @author Abdirahman with the assistance of ChatGPT 4o
  */
-public class Prog2 {
+public class mainAI {
     
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
